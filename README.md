@@ -17,6 +17,7 @@ You may fill configure file `MCDR/config/quick_run_cmd.json` to edit it or edit 
 # config
 -----
 If you dont have any knowledge about json, then dont edit it.
+
 `"command_list"`   The script list
 |name|type|example|funtion|
 |---|---|---|---|
