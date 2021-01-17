@@ -1,0 +1,22 @@
+{
+    "command_list":[
+        {
+            "name" : "whp",
+            "info" : "",
+            "delay": 0.5,
+            "commands" : [
+                "player alex spawn",
+                "player alex use"
+            ]
+        },
+        {
+            "name" : "whp2",
+            "info" : "",
+            "delay": 0.5,
+            "commands" : [
+                "player alex spawn",
+                "player alex use"
+            ]
+        }
+    ]
+}
