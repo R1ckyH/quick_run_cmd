@@ -2,7 +2,7 @@
     "command_list":[
         {
             "name" : "whp",
-            "info" : "",
+            "info" : "testing",
             "delay": 0.5,
             "commands" : [
                 "player alex spawn",
@@ -11,7 +11,7 @@
         },
         {
             "name" : "whp2",
-            "info" : "",
+            "info" : "testing2",
             "delay": 0.5,
             "commands" : [
                 "player alex spawn",
