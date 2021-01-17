@@ -15,6 +15,7 @@
 # config
 -----
 如果你没有任何关于json的知识，建议`不要`修改任何json，请使用`!!qrcmd`来配置
+
 `"command_list"`   脚本列表
 |name|type|example|funtion|
 |---|---|---|---|
