@@ -200,8 +200,8 @@ def show_script(server, player, name, num):
             return 0
 
         server.tell(player, '§b============§fquick_run_cmd§b============§r')
-        server.tell(player, '指令延迟: §d' + delay + '§r,§e 描述信息: §r' + info)
-        server.tell(player, '§b' + name + "§r的指令为:")
+        server.tell(player, rtext_cmd('指令延迟: §d' + delay + '§r 秒,§e 描述信息: §r' + info, '点击我运行 §b' + name, '!!qr ' + name))
+        server.tell(player, rtext_cmd('§b' + name + "§r的指令为:", '点击我运行 §b' + name, '!!qr ' + name))
         if len(cmd) == 0:
             server.tell(player, pline)
             return 0
@@ -260,7 +260,7 @@ def run_script(server, player, name):
         cmd = data["command_list"][index]["commands"]
         for i in range(len(cmd)):
             server.execute(cmd[i])
-            time.sleep(0.5)
+            time.sleep(float(data["command_list"][index]["delay"]))
         server.tell(player, "成功运行脚本: §b" + name)
     else:
         server.tell(player, error_no_script)
@@ -375,7 +375,7 @@ def onServerInfo(server, info):
                         server.tell(info.player, error_syntax)
                 else:
                     server.tell(info.player, error_unknown_command)
-        elif args[0] == '!!qr':
+        elif args[0] == '!!qr' and len(args) <= 2:
             if len(args) == 1:
                 tell_help(server, info.player, 0)
             else:
