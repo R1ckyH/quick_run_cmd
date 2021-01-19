@@ -200,8 +200,8 @@ def show_script(server, player, name, num):
             return 0
 
         server.tell(player, '§b============§fquick_run_cmd§b============§r')
-        server.tell(player, 'Delay: §d' + delay + '§r,§e Info: §r' + info)
-        server.tell(player, 'command of §b' + name + "§r:")
+        server.tell(player, rtext_cmd('Delay: §d' + delay + '§r second,§e Info: §r' + info, 'Click me to run §b' + name, '!!qr ' + name))
+        server.tell(player, rtext_cmd('command of §b' + name + "§r:", 'Click me to run §b' + name, '!!qr ' + name))
         if len(cmd) == 0:
             server.tell(player, pline)
             return 0
@@ -260,7 +260,7 @@ def run_script(server, player, name):
         cmd = data["command_list"][index]["commands"]
         for i in range(len(cmd)):
             server.execute(cmd[i])
-            time.sleep(0.5)
+            time.sleep(float(data["command_list"][index]["delay"]))
         server.tell(player, "Success to run script of §b" + name)
     else:
         server.tell(player, error_no_script)
@@ -375,7 +375,7 @@ def onServerInfo(server, info):
                         server.tell(info.player, error_syntax)
                 else:
                     server.tell(info.player, error_unknown_command)
-        elif args[0] == '!!qr':
+        elif args[0] == '!!qr' and len(args) <= 2:
             if len(args) == 1:
                 tell_help(server, info.player, 0)
             else:
