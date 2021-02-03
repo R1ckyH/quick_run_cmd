@@ -2,7 +2,7 @@
 -----
 [English](https://github.com/rickyhoho/quick_run_cmd/blob/master/README.md)
 
-一个用于 [MCDReforged](https://github.com/Fallen-Breath/MCDReforged) 快速运行命令的插件
+一个用于 [MCDReforged1.x](https://github.com/Fallen-Breath/MCDReforged) 快速运行命令的插件
 输入 `!!qrcmd` 或 `!!qr` 去查看帮助页面
 你可以在 `MCDR/config/quick_run_cmd.json` 修改配置文件，或者使用 `!!qrcmd` 修改配置（建议小白使用命令）
 
