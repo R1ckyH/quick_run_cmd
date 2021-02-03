@@ -2,7 +2,7 @@
 -----
 [中文](https://github.com/rickyhoho/quick_run_cmd/blob/master/README_cn.md)
 
-A plugin for [MCDReforged](https://github.com/Fallen-Breath/MCDReforged) which can run command script quickly in server.
+A plugin for [MCDReforged1.x](https://github.com/Fallen-Breath/MCDReforged) which can run command script quickly in server.
 
 Type `!!qrcmd` or `!!qr` to see the help page
 
