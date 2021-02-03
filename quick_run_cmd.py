@@ -480,7 +480,7 @@ def register_command(server : ServerInterface):
 
 def on_load(server : ServerInterface, old):
     if not os.path.isfile(json_path):
-        server.logger.info(systemreturn + '正在创建json文件')
+        server.logger.info(systemreturn + 'creating json file')
         json_save({"command_list" : []})
     register_command(server)
     server.register_help_message(prefix,'A plugin for run command quickly(use for config)')
