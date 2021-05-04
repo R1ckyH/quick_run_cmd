@@ -39,10 +39,17 @@ permission = {
 def rtext_cmd(txt, msg, cmd):
     return RText(txt).h(msg).c(RAction.run_command, cmd)
 
+def rtext_paste(txt, msg, cmd):
+    return RText(txt).h(msg).c(RAction.suggest_command, cmd)
+
 
 plugin = 'quick_run_cmd'
 prefix = '!!qrcmd'
 prefix1 = '!!qr'
+prefix2 = '!!ql'
+delay = 0.5
+page_cmd = 5
+page_list = 5
 json_path = 'config/' + plugin + '.json'
 
 systemreturn = '''§b[§rquick_run_cmd§b] §r'''
@@ -63,19 +70,20 @@ error_no_page = error + '404 此页面不存在'
 pline = '§b=====================================§r'
 help = '''§b============§fquick_run_cmd§b============§r
 ''' + rtext_cmd('!!qr §b[脚本名]§r §a快速运行脚本§r', '点击我运行脚本', '!!qrcmd help') + '''
+''' + rtext_cmd('!!ql §e(页数)§r §a显示脚本列表§r', '点击我显示脚本列表', '!!ql') + '''
 ''' + rtext_cmd('!!qrcmd help §a显示帮助信息§r', '点击我显示帮助信息', '!!qrcmd help') + '''
 ''' + rtext_cmd('!!qrcmd show §e(页数)§r §a显示脚本列表§r', '点击我显示脚本列表', '!!qrcmd show') + '''
 ''' + rtext_cmd('!!qrcmd showcmd §b[脚本名] §e(页数)§r §a显示脚本中详细信息§r', '点击我显示脚本详细信息', '!!qrcmd show') + '''
-''' + rtext_cmd('!!qrcmd add §b[脚本名]§r §a加入一个新脚本§r', '', prefix) + '''
-''' + rtext_cmd('!!qrcmd addcmd §b[脚本名] §d[command]§r §a在脚本中添加一个新指令§r', '', prefix)
+''' + rtext_paste('!!qrcmd add §b[脚本名]§r §a加入一个新脚本§r', '', prefix + 'add') + '''
+''' + rtext_paste('!!qrcmd addcmd §b[脚本名] §d[command]§r §a在脚本中添加一个新指令§r', '', prefix + 'addcmd')
 
 help2 = '''§b============§fquick_run_cmd§b============§r
-''' + rtext_cmd('!!qrcmd del §b[脚本名]§r §a删除一个脚本§r', '', prefix) +  '''
-''' + rtext_cmd('!!qrcmd delcmd §b[脚本名] §e[number]§r §a在脚本中删除指令§r', '', prefix) +  '''
-''' + rtext_cmd('!!qrcmd edit §b[脚本名] §d[新脚本名]§r §a编辑脚本名称§r', '', prefix) + '''
-''' + rtext_cmd('!!qrcmd editcmd §b[脚本名] §e[指令编号] §d[新指令]§r §a在脚本中编辑指令§r', '', prefix) + '''
-''' + rtext_cmd('!!qrcmd editinfo §b[脚本名] §d[新描述信息]§r §a编辑脚本描述信息§r', '', prefix) + '''
-''' + rtext_cmd('!!qrcmd editdelay §b[脚本名] §d[新延迟]§r §a编辑脚本指令运行间隔§r', '', prefix)
+''' + rtext_paste('!!qrcmd del §b[脚本名]§r §a删除一个脚本§r', '', prefix + 'del') +  '''
+''' + rtext_paste('!!qrcmd delcmd §b[脚本名] §e[number]§r §a在脚本中删除指令§r', '', prefix + 'delcmd') +  '''
+''' + rtext_paste('!!qrcmd edit §b[脚本名] §d[新脚本名]§r §a编辑脚本名称§r', '', prefix + 'edit') + '''
+''' + rtext_paste('!!qrcmd editcmd §b[脚本名] §e[指令编号] §d[新指令]§r §a在脚本中编辑指令§r', '', prefix + 'editdelay') + '''
+''' + rtext_paste('!!qrcmd editinfo §b[脚本名] §d[新描述信息]§r §a编辑脚本描述信息§r', '', prefix + 'editcmd') + '''
+''' + rtext_paste('!!qrcmd editdelay §b[脚本名] §d[新延迟]§r §a编辑脚本指令运行间隔§r', '', prefix + 'editinfo')
 
 
 def json_read():
@@ -128,13 +136,13 @@ def show_cmd(src : CommandSource, num):
             src.reply(error_no_cmd)
             src.reply(pline)
             return 0
-    for i in range((num - 1) * 5, (num - 1) * 5 + 5):
+    for i in range((num - 1) * page_list, (num - 1) * page_list + page_list):
         name = data["command_list"][i]["name"]
         description = data["command_list"][i]["info"]
 
         if description == '':
             description = 'None'
-        src.reply(rtext_cmd('§a[' + str(i + 1) + ']§r §b' + name + '§e 描述信息: §r' + description, 'click me to have more information about §b' + name + '§r', '!!qrcmd showcmd ' + name))
+        src.reply(rtext_cmd('§a[' + str(i + 1) + ']§r §b' + name + '§e 描述信息: §r' + description, '点击我获取更多关于 §b' + name + '§r的资讯', '!!qrcmd showcmd ' + name) + rtext_cmd("§c[点我运行]", "§c点我运行", "!!qr " + name))
         
         if len(data["command_list"]) == i + 1:
             src.reply(pline)
@@ -146,7 +154,7 @@ def show_cmd(src : CommandSource, num):
 def add_cmd(src : CommandSource, name, new_info):
     data = json_read()
     if json_search(name, data) == -1:   
-        data["command_list"].append({"name" : name, "info" : new_info, "delay": 0.5, "commands" : list('')})
+        data["command_list"].append({"name" : name, "info" : new_info, "delay": delay, "commands" : list('')})
         data["command_list"] = sorted(data["command_list"], key=lambda k: k['name'])
         json_save(data)
         if new_info == '':
@@ -221,7 +229,7 @@ def show_script(src : CommandSource, name, num):
         if info == '':
             info = 'None'
 
-        if len(cmd) < (num - 1) * 5:
+        if len(cmd) < (num - 1) * page_cmd:
             src.reply(error_no_page)
             return 0
 
@@ -232,7 +240,7 @@ def show_script(src : CommandSource, name, num):
             src.reply(pline)
             return 0
 
-        for i in range((num - 1) * 5, (num - 1) * 5 + 5):
+        for i in range((num - 1) * page_cmd, (num - 1) * page_cmd + page_cmd):
             src.reply('§a[' + str(i + 1) + ']§r ' + cmd[i])
             if len(cmd) == i + 1:
                 src.reply(pline)
@@ -483,5 +491,17 @@ def on_load(server : ServerInterface, old):
         server.logger.info(systemreturn + '正在创建json文件')
         json_save({"command_list" : []})
     register_command(server)
+    server.register_command(
+        Literal(prefix2).
+        requires(lambda src : permission_check(src, 'show')).
+        runs(lambda src : show_cmd(src, 1)).
+        on_error(RequirementNotMet, lambda src : src.reply(error_permission), handled = True).
+        then(
+            Integer('num').
+            runs(lambda src, cmdict : show_cmd(src, cmdict['num'])).
+            on_error(InvalidInteger, lambda src : src.reply(error_syntax), handled = True).
+            on_error(UnknownArgument, lambda src : src.reply(error_syntax), handled = True)
+        )
+    )
     server.register_help_message(prefix,'一个快速运行自定义脚本的插件(用于配置)')
     server.register_help_message(prefix1,'一个快速运行自定义脚本的插件(用于运行指令)')

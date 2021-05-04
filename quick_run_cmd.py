@@ -39,10 +39,17 @@ permission = {
 def rtext_cmd(txt, msg, cmd):
     return RText(txt).h(msg).c(RAction.run_command, cmd)
 
+def rtext_paste(txt, msg, cmd):
+    return RText(txt).h(msg).c(RAction.suggest_command, cmd)
+
 
 plugin = 'quick_run_cmd'
 prefix = '!!qrcmd'
 prefix1 = '!!qr'
+prefix2 = '!!ql'
+delay = 0.5
+page_cmd = 5
+page_list = 5
 json_path = 'config/' + plugin + '.json'
 
 systemreturn = '''§b[§rquick_run_cmd§b] §r'''
@@ -63,19 +70,20 @@ error_no_page = error + '404 not found'
 pline = '§b=====================================§r'
 help = '''§b============§fquick_run_cmd§b============§r
 ''' + rtext_cmd('!!qr §b[name]§r §aquick run a script§r', ' ', '!!qrcmd help') + '''
+''' + rtext_cmd('!!ql §e(page)§r §ashow list of cmd script§r', 'Click me to show list of cmd script', '!!ql') + '''
 ''' + rtext_cmd('!!qrcmd help §ashow help of quick_run_cmd§r', 'Click me to show help of qrcmd', '!!qrcmd help') + '''
 ''' + rtext_cmd('!!qrcmd show §e(page)§r §ashow list of cmd script§r', 'Click me to show list of cmd script', '!!qrcmd show') + '''
 ''' + rtext_cmd('!!qrcmd showcmd §b[name] §e(page)§r §ashow detail of a cmd script§r', 'Click me to show detail of a/all cmd script', '!!qrcmd showcmd') + '''
-''' + rtext_cmd('!!qrcmd add §b[name]§r §aadd a new script§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd addcmd §b[name] §d[command]§r §aadd new command of a cmd script§r', ' ', prefix)
+''' + rtext_paste('!!qrcmd add §b[name]§r §aadd a new script§r', ' ', prefix + 'add') + '''
+''' + rtext_paste('!!qrcmd addcmd §b[name] §d[command]§r §aadd new command of a cmd script§r', ' ', prefix + 'addcmd')
 
 help2 = '''§b============§fquick_run_cmd§b============§r
-''' + rtext_cmd('!!qrcmd del/remove §b[name]§r §adelete a cmd script§r', ' ', prefix) +  '''
-''' + rtext_cmd('!!qrcmd delcmd/removecmd §b[name] §e[number]§r §adelete a command of cmd script§r', ' ', prefix) +  '''
-''' + rtext_cmd('!!qrcmd edit §b[name] §d[new name]§r §aedit the name of a cmd script§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd editdelay §b[name] §d[new delay]§r §aedit the delay of a cmd script§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd editcmd §b[name] §e[number] §d[new command]§r §aedit the command of a cmd script§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd editinfo §b[name] §d[new info]§r §aedit the description of a cmd script§r', ' ', prefix)
+''' + rtext_paste('!!qrcmd del/remove §b[name]§r §adelete a cmd script§r', ' ', prefix + 'del') +  '''
+''' + rtext_paste('!!qrcmd delcmd/removecmd §b[name] §e[number]§r §adelete a command of cmd script§r', ' ', prefix + 'delcmd') +  '''
+''' + rtext_paste('!!qrcmd edit §b[name] §d[new name]§r §aedit the name of a cmd script§r', ' ', prefix + 'edit') + '''
+''' + rtext_paste('!!qrcmd editdelay §b[name] §d[new delay]§r §aedit the delay of a cmd script§r', ' ', prefix + 'editdelay') + '''
+''' + rtext_paste('!!qrcmd editcmd §b[name] §e[number] §d[new command]§r §aedit the command of a cmd script§r', ' ', prefix + 'editcmd') + '''
+''' + rtext_paste('!!qrcmd editinfo §b[name] §d[new info]§r §aedit the description of a cmd script§r', ' ', prefix + 'editinfo')
 
 
 def json_read():
@@ -128,13 +136,13 @@ def show_cmd(src : CommandSource, num):
             src.reply(error_no_cmd)
             src.reply(pline)
             return 0
-    for i in range((num - 1) * 5, (num - 1) * 5 + 5):
+    for i in range((num - 1) * page_list, (num - 1) * page_list + page_list):
         name = data["command_list"][i]["name"]
         description = data["command_list"][i]["info"]
 
         if description == '':
             description = 'None'
-        src.reply(rtext_cmd('§a[' + str(i + 1) + ']§r §b' + name + '§e Info: §r' + description, 'click me to have more information about §b' + name + '§r', '!!qrcmd showcmd ' + name))
+        src.reply(rtext_cmd('§a[' + str(i + 1) + ']§r §b' + name + '§e Info: §r' + description, 'click me to have more information about §b' + name + '§r', '!!qrcmd showcmd ' + name) + rtext_cmd("§c[run]", "§cclick me to run", "!!qr " + name))
         
         if len(data["command_list"]) == i + 1:
             src.reply(pline)
@@ -146,7 +154,7 @@ def show_cmd(src : CommandSource, num):
 def add_cmd(src : CommandSource, name, new_info):
     data = json_read()
     if json_search(name, data) == -1:   
-        data["command_list"].append({"name" : name, "info" : new_info, "delay": 0.5, "commands" : list('')})
+        data["command_list"].append({"name" : name, "info" : new_info, "delay": delay, "commands" : list('')})
         data["command_list"] = sorted(data["command_list"], key=lambda k: k['name'])
         json_save(data)
         if new_info == '':
@@ -221,7 +229,7 @@ def show_script(src : CommandSource, name, num):
         if info == '':
             info = 'None'
 
-        if len(cmd) < (num - 1) * 5:
+        if len(cmd) < (num - 1) * page_cmd:
             src.reply(error_no_page)
             return 0
 
@@ -232,7 +240,7 @@ def show_script(src : CommandSource, name, num):
             src.reply(pline)
             return 0
 
-        for i in range((num - 1) * 5, (num - 1) * 5 + 5):
+        for i in range((num - 1) * page_cmd, (num - 1) * page_cmd + page_cmd):
             src.reply('§a[' + str(i + 1) + ']§r ' + cmd[i])
             if len(cmd) == i + 1:
                 src.reply(pline)
@@ -483,5 +491,17 @@ def on_load(server : ServerInterface, old):
         server.logger.info(systemreturn + 'creating json file')
         json_save({"command_list" : []})
     register_command(server)
+    server.register_command(
+        Literal(prefix2).
+        requires(lambda src : permission_check(src, 'show')).
+        runs(lambda src : show_cmd(src, 1)).
+        on_error(RequirementNotMet, lambda src : src.reply(error_permission), handled = True).
+        then(
+            Integer('num').
+            runs(lambda src, cmdict : show_cmd(src, cmdict['num'])).
+            on_error(InvalidInteger, lambda src : src.reply(error_syntax), handled = True).
+            on_error(UnknownArgument, lambda src : src.reply(error_syntax), handled = True)
+        )
+    )
     server.register_help_message(prefix,'A plugin for run command quickly(use for config)')
     server.register_help_message(prefix1,'A plugin for run command quickly(use for run)')
