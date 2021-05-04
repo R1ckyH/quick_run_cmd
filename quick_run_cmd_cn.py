@@ -8,10 +8,17 @@ from utils.rtext import *
 def rtext_cmd(txt, msg, cmd):
     return RText(txt).h(msg).c(RAction.run_command, cmd)
 
+def rtext_paste(txt, msg, cmd):
+    return RText(txt).h(msg).c(RAction.suggest_command, cmd)
+
 
 plugin = 'quick_run_cmd'
 prefix = '!!qrcmd'
 prefix1 = '!!qr'
+prefix2 = '!!ql'
+delay = 0.5
+page_cmd = 5
+page_list = 5
 json_path = 'config/' + plugin + '.json'
 
 systemreturn = '''§b[§rquick_run_cmd§b] §r'''
@@ -32,19 +39,20 @@ error_no_page = error + '404 此页面不存在'
 pline = '§b=====================================§r'
 help = '''§b============§fquick_run_cmd§b============§r
 ''' + rtext_cmd('!!qr §b[脚本名]§r §a快速运行脚本§r', '点击我运行脚本', '!!qrcmd help') + '''
+''' + rtext_cmd('!!ql §e(页数)§r §a显示脚本列表§r', '点击我显示脚本列表', '!!ql') + '''
 ''' + rtext_cmd('!!qrcmd help §a显示帮助信息§r', '点击我显示帮助信息', '!!qrcmd help') + '''
 ''' + rtext_cmd('!!qrcmd show §e(页数)§r §a显示脚本列表§r', '点击我显示脚本列表', '!!qrcmd show') + '''
 ''' + rtext_cmd('!!qrcmd showcmd §b[脚本名] §e(页数)§r §a显示脚本中详细信息§r', '点击我显示脚本详细信息', '!!qrcmd show') + '''
-''' + rtext_cmd('!!qrcmd add §b[脚本名]§r §a加入一个新脚本§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd addcmd §b[脚本名] §d[command]§r §a在脚本中添加一个新指令§r', ' ', prefix)
+''' + rtext_paste('!!qrcmd add §b[脚本名]§r §a加入一个新脚本§r', ' ', prefix + 'add') + '''
+''' + rtext_paste('!!qrcmd addcmd §b[脚本名] §d[command]§r §a在脚本中添加一个新指令§r', ' ', prefix + 'addcmd')
 
 help2 = '''§b============§fquick_run_cmd§b============§r
-''' + rtext_cmd('!!qrcmd del/remove §b[脚本名]§r §a删除一个脚本§r', ' ', prefix) +  '''
-''' + rtext_cmd('!!qrcmd delcmd/removecmd §b[脚本名] §e[number]§r §a在脚本中删除指令§r', ' ', prefix) +  '''
-''' + rtext_cmd('!!qrcmd edit §b[脚本名] §d[新脚本名]§r §a编辑脚本名称§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd editdelay §b[脚本名] §d[新延迟]§r §a编辑脚本指令运行间隔§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd editcmd §b[脚本名] §e[指令编号] §d[新指令]§r §a在脚本中编辑指令§r', ' ', prefix) + '''
-''' + rtext_cmd('!!qrcmd editinfo §b[脚本名] §d[新描述信息]§r §a编辑脚本描述信息§r', ' ', prefix)
+''' + rtext_paste('!!qrcmd del/remove §b[脚本名]§r §a删除一个脚本§r', ' ', prefix + 'del') +  '''
+''' + rtext_paste('!!qrcmd delcmd/removecmd §b[脚本名] §e[number]§r §a在脚本中删除指令§r', ' ', prefix + 'delcmd') +  '''
+''' + rtext_paste('!!qrcmd edit §b[脚本名] §d[新脚本名]§r §a编辑脚本名称§r', ' ', prefix + 'edit') + '''
+''' + rtext_paste('!!qrcmd editdelay §b[脚本名] §d[新延迟]§r §a编辑脚本指令运行间隔§r', ' ', prefix + 'editdelay') + '''
+''' + rtext_paste('!!qrcmd editcmd §b[脚本名] §e[指令编号] §d[新指令]§r §a在脚本中编辑指令§r', ' ', prefix + 'editcmd') + '''
+''' + rtext_paste('!!qrcmd editinfo §b[脚本名] §d[新描述信息]§r §a编辑脚本描述信息§r', ' ', prefix + 'editinfo')
 
 
 def permission_check(server, info):
@@ -102,23 +110,23 @@ def tell_help(server, player, num):
 
 def show_cmd(server, player, num):
     data = json_read()
-    if len(data["command_list"]) < (num - 1) * 5:
+    if len(data["command_list"]) < (num - 1) * page_list:
         server.tell(player, error_no_page)
         return 0
     
-    server.tell(player, '§b============§fquick_run_cmd§b============§r')
+    server.tell(player, '§b===============§fquick_run_cmd§b===============§r')
     if len(data["command_list"]) == 0:
             server.tell(player, error_no_cmd)
             server.tell(player, pline)
             return 0
-    for i in range((num - 1) * 5, (num - 1) * 5 + 5):
+    for i in range((num - 1) * page_list, (num - 1) * page_list + page_list):
         name = data["command_list"][i]["name"]
         description = data["command_list"][i]["info"]
 
         if description == '':
             description = 'None'
-        server.tell(player, rtext_cmd('§a[' + str(i + 1) + ']§r §b' + name + '§e Info: §r' + description, 'click me to have more information about §b' + name + '§r', '!!qrcmd showcmd ' + name))
-        
+        server.tell(player, rtext_cmd('§a[' + str(i + 1) + ']§r §b' + name + '§e Info: §r' + description, '点击我获取更多关于 §b' + name + '§r的资讯', '!!qrcmd showcmd ' + name) + rtext_cmd("§c[点我运行]", "§c点我运行", "!!qr " + name))
+
         if len(data["command_list"]) == i + 1:
             server.tell(player, pline)
             return 0
@@ -128,7 +136,7 @@ def show_cmd(server, player, num):
 def add_cmd(server, player, name, new_info):
     data = json_read()
     if json_search(name, data) == -1:   
-        data["command_list"].append({"name" : name, "info" : new_info, "delay": 0.5, "commands" : list('')})
+        data["command_list"].append({"name" : name, "info" : new_info, "delay": delay, "commands" : list('')})
         data["command_list"] = sorted(data["command_list"], key=lambda k: k['name'])
         json_save(data)
         server.tell(player, systemreturn + '成功添加脚本 §b' + name + '§r， 描述信息: §e' + new_info + '§r')
@@ -195,7 +203,7 @@ def show_script(server, player, name, num):
         if info == '':
             info = 'None'
 
-        if len(cmd) < (num - 1) * 5:
+        if len(cmd) < (num - 1) * page_cmd:
             server.tell(player, error_no_page)
             return 0
 
@@ -206,7 +214,7 @@ def show_script(server, player, name, num):
             server.tell(player, pline)
             return 0
 
-        for i in range((num - 1) * 5, (num - 1) * 5 + 5):
+        for i in range((num - 1) * page_cmd, (num - 1) * page_cmd + page_cmd):
             server.tell(player, '§a[' + str(i + 1) + ']§r ' + cmd[i])
             if len(cmd) == i + 1:
                 server.tell(player, pline)
@@ -267,7 +275,7 @@ def run_script(server, player, name):
 
 
 def onServerInfo(server, info):
-    if info.content.startswith('!!qr') or info.content.startswith('!!qrcmd'):
+    if info.content.startswith('!!qr') or info.content.startswith('!!qrcmd') or info.content.startswith('!!ql'):
         permission = permission_check(server, info)
         if info.content.endswith('<--[HERE]'):
             info.content = info.content.replace('<--[HERE]','')
@@ -380,6 +388,13 @@ def onServerInfo(server, info):
                 tell_help(server, info.player, 0)
             else:
                 run_script(server, info.player, args[1])
+        elif args[0] =='!!ql':
+            if len(args) == 1 or args[1] == 'all':
+                show_cmd(server, info.player, 1)
+            else:
+                if not_num(server, info.player, args[1]):
+                    return 0
+                show_cmd(server, info.player, int(args[1]))
         else:
             server.tell(info.player, error_unknown_command)
 
