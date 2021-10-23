@@ -14,7 +14,7 @@ PLUGIN_METADATA = {
     'name': 'quick_run_cmd',
     'description': 'A plugin for run command quickly.',
     'author': 'ricky',
-    'link': 'https://github.com/rickyhoho/quick_run_cmd',
+    'link': 'https://github.com/R1ckyH/quick_run_cmd',
     'dependencies': {
         'mcdreforged': '>=1.0.0'
     }

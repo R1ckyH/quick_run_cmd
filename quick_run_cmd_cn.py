@@ -14,7 +14,7 @@ PLUGIN_METADATA = {
     'name': 'quick_run_cmd_cn',
     'description': '一个快速运行自定义脚本的插件.',
     'author': 'ricky',
-    'link': 'https://github.com/rickyhoho/quick_run_cmd',
+    'link': 'https://github.com/R1ckyH/quick_run_cmd',
     'dependencies': {
         'mcdreforged': '>=1.0.0'
     }
