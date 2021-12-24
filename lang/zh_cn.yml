@@ -1,0 +1,46 @@
+quick_run_cmd.click_msg: "点击我"
+quick_run_cmd.paste_msg: "点击我粘贴"
+quick_run_cmd.information: "点击我获取更多关于"
+quick_run_cmd.main_msg: "一个快速运行自定义脚本的插件(用于配置)"
+quick_run_cmd.main_msg2: "一个快速运行自定义脚本的插件(用于运行指令)"
+quick_run_cmd.help: "显示帮助信息"
+quick_run_cmd.qr: "快速运行脚本"
+quick_run_cmd.show: "显示脚本列表"
+quick_run_cmd.showcmd: "显示脚本中详细信息"
+quick_run_cmd.add_script: "加入一个新脚本"
+quick_run_cmd.addcmd: "在脚本中添加一个新指令"
+quick_run_cmd.del: "删除一个脚本"
+quick_run_cmd.delcmd: "在脚本中删除指令"
+quick_run_cmd.edit: "编辑脚本名称"
+quick_run_cmd.editdelay: "编辑脚本指令运行间隔"
+quick_run_cmd.editcmd: "在脚本中编辑指令"
+quick_run_cmd.editinfo: "编辑脚本描述信息"
+quick_run_cmd.next_page: "下一页"
+quick_run_cmd.run: "运行"
+quick_run_cmd.success_add: "成功添加脚本 §b{}§r， 描述信息:§e{}§r"
+quick_run_cmd.success_del: "成功移除脚本 §b{}§r"
+quick_run_cmd.success_rename: "成功重命名脚本 §b{}§r 至 §d{}§r"
+quick_run_cmd.success_editinfo: "成功将 §b{}§r 的描述信息从 §e{}§r 修改至 §d{}§r"
+quick_run_cmd.success_editdelay: "成功将 §b{}§r 的延迟从 §e{}§r 修改至 §d{}§r"
+quick_run_cmd.success_addcmd: "成功将§d{}§r 添加至 §b{}§r"
+quick_run_cmd.success_delcmd: "成功将 §d{}§r 从指令集 §b{}§r 中移除"
+quick_run_cmd.success_editcmd: "成功将 §d{}§r 的 §b{}§r 指令换成 §d{}§r"
+quick_run_cmd.success_run: "成功运行脚本: §b{}§r"
+quick_run_cmd.info: |
+  指令延迟: §d{}§r 秒,§e 描述信息: §r{}
+  §b{}§r的指令为::
+quick_run_cmd.error_no_script: |
+  Unknown script
+  {}
+quick_run_cmd.error_cmd_exist: |
+  The script already exist§r
+  Type §7{} for more information
+quick_run_cmd.error_unknown_command: |
+  Unknown command
+  Type §7{} for more information
+quick_run_cmd.error_syntax: |
+  Syntax error
+  {}
+quick_run_cmd.error_permission: "你没有权限使用此指令"
+quick_run_cmd.error_no_cmd: "No script here"
+quick_run_cmd.error_not_found: "404 not found"

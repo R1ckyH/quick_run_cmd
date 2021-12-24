@@ -1,0 +1,49 @@
+quick_run_cmd.click_msg: "Click me to"
+quick_run_cmd.paste_msg: "Click me to paste"
+quick_run_cmd.information: "have more information about"
+quick_run_cmd.main_msg: "A plugin for run command quickly(use for config)"
+quick_run_cmd.main_msg2: "A plugin for run command quickly(use for run)"
+quick_run_cmd.help: "show help message of qrcmd"
+quick_run_cmd.qr: "quick run a script"
+quick_run_cmd.show: "show list of cmd script"
+quick_run_cmd.showcmd: "show detail of a cmd script"
+quick_run_cmd.add_script: "add a new script"
+quick_run_cmd.addcmd: "add new command of a cmd script"
+quick_run_cmd.del: "delete a cmd script"
+quick_run_cmd.delcmd: "delete a command of cmd script"
+quick_run_cmd.edit: "edit the name of a cmd script"
+quick_run_cmd.editdelay: "edit the delay of a cmd script"
+quick_run_cmd.editcmd: "edit the command of a cmd script"
+quick_run_cmd.editinfo: "edit the description of a cmd script"
+quick_run_cmd.next_page: "next page"
+quick_run_cmd.run: "run"
+quick_run_cmd.success_add: "Success to add §b{}§r with info §e{}§r"
+quick_run_cmd.success_del: "Success to remove §b{}§r"
+quick_run_cmd.success_rename: "Success to rename §b{}§r to §d{}§r"
+quick_run_cmd.success_editinfo: "Success to edit info of §b{}§r from §e{}§r to §d{}§r"
+quick_run_cmd.success_editdelay: "Success to edit delay of §b{}§r from §e{}§r to §d{}§r"
+quick_run_cmd.success_addcmd: "Success to add §d{}§r in script §b{}§r"
+quick_run_cmd.success_delcmd: "Success to remove §d{}§r in script §b{}§r"
+quick_run_cmd.success_editcmd: "Success to change §d{}§r to §b{}§r in script §d{}§r"
+quick_run_cmd.success_run: "Success to run script of §b{}§r"
+quick_run_cmd.info: |
+  Delay: §d{}§r second,§e Info: §r{}
+  Command of §b{}§r:
+quick_run_cmd.error_rcon: |
+  Rcon connect failed to §d[{}]§c server§r
+  Check file config/quick_run_cmd.json to ensure your data is right
+quick_run_cmd.error_no_script: |
+  Unknown script
+  {}
+quick_run_cmd.error_cmd_exist: |
+  The script already exist§r
+  Type §7{} for more information
+quick_run_cmd.error_unknown_command: |
+  Unknown command
+  Type §7{} for more information
+quick_run_cmd.error_syntax: |
+  Syntax error
+  {}
+quick_run_cmd.error_permission: "You have no Permission to use this command"
+quick_run_cmd.error_no_cmd: "No script here"
+quick_run_cmd.error_not_found: "404 not found"
